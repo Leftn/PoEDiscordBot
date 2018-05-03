@@ -1,21 +1,20 @@
 # Requirements
 
-* PhantomJS
-* Node
-* Python3.x
-* ImageMagick
+* python 3.6
 * discord-python
 * Selenium
+* Pillow
+* Chrome + Chromedriver
 
 # Installation
 
-    sudo apt-get install nodejs
-    sudo apt-get install npm
-    sudo npm -g install phantomjs
-    sudo apt-get install imagemagick
-    sudo pip install selenium
-    sudo pip install discord-python
     
+    sudo pip install selenium
+    sudo pip install discord.py
+    sudo pip install Pillow
+    
+For chromedriver: https://sites.google.com/a/chromium.org/chromedriver/
+You must save the path where you store the chromedriver in config.py
     
 # Configuration
 

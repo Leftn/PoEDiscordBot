@@ -24,6 +24,7 @@ def get_element_screenshot(element:WebElement):
     image = image.crop((int(x), int(y), int(x+w), int(y+h)))
     return image
 
+
 def get_image(item):
     options = Options()
     options.add_argument("--headless")
@@ -34,6 +35,5 @@ def get_image(item):
     try:
         e = driver.find_element_by_class_name("item-box")
         return get_element_screenshot(e)
-    except Exception as e:
+    except Exception:
         return None
-

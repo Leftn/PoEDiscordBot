@@ -4,6 +4,7 @@ from discord.ext import commands
 import config, helpers, screenshot
 
 bot = commands.Bot(command_prefix=".")
+league = "Bestiary"
 
 @bot.command(pass_context=True)
 async def get(ctx, *args):
@@ -19,6 +20,15 @@ async def get(ctx, *args):
     else:
         await bot.delete_message(message)
         await bot.say(f"Could not find {item}")
+
+
+@bot.command(pass_context=True)
+async def pc (ctx, *args):
+    item = helpers.titlecase(args)
+    message = await bot.say(f"Checking poe.ninja for the price of {item}...")
+    data = helpers.pricecheck(item, league)
+    await bot.delete_message(message)
+    await bot.say(str(data))
 
 if __name__ == "__main__":
     print("Use the following url to connect the bot to your server:")

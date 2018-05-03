@@ -1,3 +1,7 @@
+import json
+
+import requests
+
 import config
 
 def titlecase(tuple):
@@ -10,3 +14,9 @@ def titlecase(tuple):
         else:
             continue
     return " ".join(tuple)
+
+def pricecheck(item, league):
+    data = {"league":league, "name":item}
+    headers = {"Content-Type":"application/json"}
+    data = requests.post("http://45.76.116.155/api/v1/get", data=json.dumps(data), headers=headers).json()
+    return data

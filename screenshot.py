@@ -10,7 +10,6 @@ from PIL import Image
 
 import config
 
-
 def get_element_screenshot(element:WebElement):
     driver = element._parent
     ActionChains(driver).move_to_element(element).perform()
@@ -23,7 +22,6 @@ def get_element_screenshot(element:WebElement):
     image = Image.open(BytesIO(src_png))
     image = image.crop((int(x), int(y), int(x+w), int(y+h)))
     return image
-
 
 def get_image(item):
     options = Options()

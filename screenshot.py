@@ -25,6 +25,10 @@ def get_element_screenshot(element:WebElement):
 def get_image():
     driver = webdriver.PhantomJS()
     driver.set_window_size(config.browser_width,config.browser_height)
+    driver.get("https://pathofexile.gamepedia.com/The_Poet%27s_Pen")
     e = driver.find_element_by_class_name("infobox-page-container")
     print(e)
     get_element_screenshot(e)
+
+if __name__ == "__main__":
+    get_image()

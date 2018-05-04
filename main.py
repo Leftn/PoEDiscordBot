@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 from discord.utils import oauth_url
 from discord.ext import commands
 
@@ -6,7 +8,7 @@ import config, helpers, screenshot
 bot = commands.Bot(command_prefix=".")
 league = "Bestiary"
 
-def set_league(new_league):
+def _set_league(new_league):
     global league
     league = new_league
 
@@ -20,7 +22,9 @@ async def get(ctx, *args):
         with open("temp.png", "wb") as f:
             image.save(f, "png")
         with open("temp.png", "rb") as f:
-            await bot.delete_message(message)
+            # In order to change from a PIL image format to something discord.py can use we need to use a temporary file
+            # TODO Determine how bad this is, since the bot is asynchronous; maybe just just rename the images as hashes
+            await bot.edit_message(message, config.wiki.format(quote(item)))
             await bot.send_file(ctx.message.channel, f)
     else:
         await bot.delete_message(message)
@@ -36,10 +40,10 @@ async def pc (*args):
     await bot.say(str(data))
 
 @bot.command()
-async def set_league(*args):
+async def set_league(*args): #TODO: Determine if this command should be protected
     name = helpers.titlecase(args)
     if name in config.leagues:
-        set_league(name)
+        _set_league(name)
         await bot.say(f"Successfully set default league to: {name}")
     else:
         await bot.say(f"League '{name}' not a playable league")

@@ -4,3 +4,5 @@ excluded_titlecase_words = ["of", "and", "the", "to", "at", "for"]
 chromedriver = ""
 client_id = ""
 token_secret =""
+leagues = ["Bestiary", "Bestiary Hardcore", "Hardcore", "Standard", "Flashback", "Flashback Hardcore"]
+wiki = "https://pathofexile.gamepedia.com/{}"

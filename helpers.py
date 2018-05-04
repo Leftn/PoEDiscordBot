@@ -17,6 +17,12 @@ def titlecase(tuple):
     return " ".join(tuple)
 
 def pricecheck(item, league):
+    """
+    
+    :param item: String: a titlecased name of the item to search for
+    :param league: String: The specified league to search
+    :return: 
+    """
     data = {"league":league, "name":item}
     headers = {"Content-Type":"application/json"}
     # The server is an API of my own making, I havn't bothered writing documentation/creating a domain name yet

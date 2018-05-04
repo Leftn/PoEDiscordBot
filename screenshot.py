@@ -1,16 +1,18 @@
 # Modified from: http://stackoverflow.com/questions/1197172/how-can-i-take-a-screenshot-image-of-a-website-using-python
-from io import BytesIO
-from base64 import b64decode
+import hashlib
 from urllib.parse import quote
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 from PIL import Image
 
 import config
 
-def get_element_screenshot(element:WebElement):
+def get_element_screenshot(element:WebElement, save_name):
     """
     This function takes a screenshot of the whole browser window and crops out everything but the selected web element
     
@@ -18,17 +20,16 @@ def get_element_screenshot(element:WebElement):
     :return: Image: PIL object of the specified web element
     """
     driver = element._parent
-    ActionChains(driver).move_to_element(element).perform()
-    src_base64 = driver.get_screenshot_as_base64()
-    src_png = b64decode(src_base64)
+    driver.save_screenshot(f"images/{save_name}.png")
     x = element.location["x"]
     y = element.location["y"]
     w = element.size["width"]
     h = element.size["height"]
     if w and h:
-        image = Image.open(BytesIO(src_png))
+        image = Image.open(open(f"images/{save_name}.png", "rb"))
         image = image.crop((int(x), int(y), int(x+w), int(y+h)))
-        return image
+        image.save(f"images/{save_name}.png")
+        return f"images/{save_name}.png"
     else:
         return None
 
@@ -39,10 +40,11 @@ def get_element_box(driver):
     return e
 
 def get_image(item):
+    print(item)
     options = Options()
     options.add_argument("--headless") #If you are for some reason not running the bot on a headless server
     driver = webdriver.Chrome(executable_path=config.chromedriver,options=options)
     driver.set_window_size(config.browser_width,config.browser_height)
     item = quote(item) # urllib.parse: Converts special characters to html safe encodings e.g. ' ' --> %20
     driver.get(config.wiki.format(item))
-    return get_element_screenshot(get_element_box(driver))
+    return get_element_screenshot(get_element_box(driver), hashlib.md5(item.encode("utf-8")).hexdigest())

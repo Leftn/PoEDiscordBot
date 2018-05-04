@@ -19,9 +19,7 @@ async def get(ctx, *args):
     message = await bot.say(f"Trying to find {item}...")
     image = screenshot.get_image(item)
     if image:
-        with open("temp.png", "wb") as f:
-            image.save(f, "png")
-        with open("temp.png", "rb") as f:
+        with open(image, "rb") as f:
             # In order to change from a PIL image format to something discord.py can use we need to use a temporary file
             # TODO Determine how bad this is, since the bot is asynchronous; maybe just just rename the images as hashes
             await bot.edit_message(message, "<"+config.wiki.format(quote(item)+">")) # The angle brackets are there to turn off the auto embeding (Makes it look ugly

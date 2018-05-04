@@ -40,10 +40,12 @@ def get_element_box(driver):
     return e
 
 def get_image(item):
-    print(item)
-    options = Options()
-    options.add_argument("--headless") #If you are for some reason not running the bot on a headless server
-    driver = webdriver.Chrome(executable_path=config.chromedriver,options=options)
+    if config.browser == "chrome":
+        options = Options()
+        options.add_argument("--headless") #If you are for some reason not running the bot on a headless server
+        driver = webdriver.Chrome(executable_path=config.driver_executable, options=options)
+    elif config.browser == "phantomjs":
+        driver = webdriver.PhantomJS()
     driver.set_window_size(config.browser_width,config.browser_height)
     item = quote(item) # urllib.parse: Converts special characters to html safe encodings e.g. ' ' --> %20
     driver.get(config.wiki.format(item))

@@ -42,14 +42,16 @@ async def pc (ctx, *args):
     message = await bot.say(f"Checking poe.ninja for the price of {item}...")
     data = helpers.pricecheck(item, _get_league(ctx.message.server))
     await bot.delete_message(message)
-    await bot.say(str(data))
+    for element in data:
+        embed = helpers.create_embed_pricing(element)
+        await bot.say(embed=embed)
 
 @bot.command(pass_context=True)
 async def set_league(ctx, *args): #TODO: Determine if this command should be protected
     name = helpers.titlecase(args)
     if name in config.leagues:
         server = ctx.message.server
-        _set_league(server,name)
+        _set_league(server, name)
         await bot.say(f"Successfully set default league to: {name}")
     else:
         await bot.say(f"League '{name}' not a playable league")

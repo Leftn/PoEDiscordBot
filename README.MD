@@ -55,3 +55,9 @@ Once done, you need to run database.py once:
 After this, you should be able to run the bot with:
 
     python main.py
+
+Finally, if you haven't set `base_server` in config.py call the bot from your server:
+
+    .set_league <league>
+
+As of writing this, the leagues are as follows: Bestiary, Standard, Bestiary Hardcore, Standard Hardcore, Flashback, Flashback Hardcore

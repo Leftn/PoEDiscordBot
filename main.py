@@ -24,7 +24,7 @@ async def get(ctx, *args):
         with open("temp.png", "rb") as f:
             # In order to change from a PIL image format to something discord.py can use we need to use a temporary file
             # TODO Determine how bad this is, since the bot is asynchronous; maybe just just rename the images as hashes
-            await bot.edit_message(message, config.wiki.format(quote(item)))
+            await bot.edit_message(message, "<"+config.wiki.format(quote(item)+">")) # The angle brackets are there to turn off the auto embeding (Makes it look ugly
             await bot.send_file(ctx.message.channel, f)
     else:
         await bot.delete_message(message)

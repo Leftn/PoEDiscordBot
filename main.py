@@ -6,6 +6,11 @@ import config, helpers, screenshot
 bot = commands.Bot(command_prefix=".")
 league = "Bestiary"
 
+def set_league(new_league):
+    global league
+    league = new_league
+
+
 @bot.command(pass_context=True)
 async def get(ctx, *args):
     item = helpers.titlecase(args)
@@ -22,13 +27,23 @@ async def get(ctx, *args):
         await bot.say(f"Could not find {item}")
 
 
-@bot.command(pass_context=True)
-async def pc (ctx, *args):
+@bot.command()
+async def pc (*args):
     item = helpers.titlecase(args)
     message = await bot.say(f"Checking poe.ninja for the price of {item}...")
     data = helpers.pricecheck(item, league)
     await bot.delete_message(message)
     await bot.say(str(data))
+
+@bot.command()
+async def set_league(*args):
+    name = helpers.titlecase(args)
+    if name in config.leagues:
+        set_league(name)
+        await bot.say(f"Successfully set default league to: {name}")
+    else:
+        await bot.say(f"League '{name}' not a playable league")
+
 
 if __name__ == "__main__":
     print("Use the following url to connect the bot to your server:")

@@ -6,7 +6,7 @@ from discord.ext import commands
 import config, helpers, screenshot
 
 bot = commands.Bot(command_prefix=".")
-league = "Bestiary"
+league = "Standard"
 
 def _set_league(new_league):
     global league

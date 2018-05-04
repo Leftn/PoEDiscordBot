@@ -4,10 +4,7 @@ from urllib.parse import quote
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-
+import requests
 from PIL import Image
 
 import config
@@ -15,7 +12,7 @@ import config
 def get_element_screenshot(element:WebElement, save_name):
     """
     This function takes a screenshot of the whole browser window and crops out everything but the selected web element
-    
+
     :param element: selenium web element object
     :return: Image: PIL object of the specified web element
     """
@@ -43,7 +40,7 @@ def get_image(item):
     if config.browser == "chrome":
         options = Options()
         options.add_argument("--headless") #If you are for some reason not running the bot on a headless server
-        driver = webdriver.Chrome(executable_path=config.driver_executable, options=options)
+        driver = webdriver.Chrome(executable_path=config.driver_executable, chrome_options=options)
     elif config.browser == "phantomjs":
         driver = webdriver.PhantomJS()
     driver.set_window_size(config.browser_width,config.browser_height)

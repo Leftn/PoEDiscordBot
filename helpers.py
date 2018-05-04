@@ -32,7 +32,7 @@ def pricecheck(item, league):
 
 def create_embed_pricing(data):
     embed = Embed(colour=0x4f1608)
-    if data.get("type") == "map":
-        embed.add_field(name="Chaos", value=data.get("chaos"))
-        embed.add_field(name="Exalted", value=data.get("exalted"))
+    embed.add_field(name="Chaos", value=data.get("chaos"))
+    embed.add_field(name="Exalted", value=data.get("exalted"))
+    print(data)
     return embed

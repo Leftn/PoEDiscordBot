@@ -1,4 +1,4 @@
-#PoEDiscordBot
+# PoEDiscordBot
 
 PoE Discord Bot is a bot which is a rewrite of PoEWikiBot in the python language.
 Since the bot maintainer appears to be inactive, and I have a new idea for some bot functionality, I have decided to create this bot.

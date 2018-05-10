@@ -45,12 +45,7 @@ Since I am lazy and haven't created a setup script, you need to do this yourself
 
 In the root folder, create the following directories:
 
-    db
     images
-
-Once done, you need to run database.py once:
-
-    python database.py
 
 After this, you should be able to run the bot with:
 

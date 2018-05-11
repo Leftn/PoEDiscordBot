@@ -1,4 +1,4 @@
-#PoEDiscordBot
+# PoEDiscordBot
 
 PoE Discord Bot is a bot which is a rewrite of PoEWikiBot in the python language.
 Since the bot maintainer appears to be inactive, and I have a new idea for some bot functionality, I have decided to create this bot.
@@ -45,12 +45,7 @@ Since I am lazy and haven't created a setup script, you need to do this yourself
 
 In the root folder, create the following directories:
 
-    db
     images
-
-Once done, you need to run database.py once:
-
-    python database.py
 
 After this, you should be able to run the bot with:
 

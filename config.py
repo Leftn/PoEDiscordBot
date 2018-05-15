@@ -5,5 +5,4 @@ driver_executable = ""
 browser = "chrome"
 client_id = ""
 token_secret =""
-leagues = ["Bestiary", "Bestiary Hardcore", "Hardcore", "Standard", "Flashback", "Flashback Hardcore"]
 wiki = "https://pathofexile.gamepedia.com/{}"

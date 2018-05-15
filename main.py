@@ -8,18 +8,6 @@ import config, helpers, screenshot
 bot = commands.Bot(command_prefix=".")
 startup_extensions = ["pricechecker"]
 
-try:
-    league = {config.base_server:"Standard"} # Don't need to have this set
-except AttributeError:
-    league = {}
-
-def _set_league(server, new_league):
-    global league
-    league.update({server:new_league})
-
-def _get_league(server):
-    global league
-    return league.get(server)
 
 @bot.command(pass_context=True)
 async def get(ctx, *args):

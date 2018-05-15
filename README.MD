@@ -8,6 +8,11 @@ Since the bot maintainer appears to be inactive, and I have a new idea for some 
 * Wiki Item retrieval (.get)
 * poe.ninja pricecheck (.pc)
 
+### Quite notice
+
+As of 12-05-2018 running chrome in headless mode is signifigantly slower than other browsers (Takes ~30s to get a screenshot of a page), the only other browser which is supported is PhantomJS which is being depreciated by selenium.
+I do not recommend using the `.get` command because of this until google have fixed their browser
+
 ### Requirements
 
 * python 3.6
@@ -46,13 +51,26 @@ Since I am lazy and haven't created a setup script, you need to do this yourself
 In the root folder, create the following directories:
 
     images
+    
+Then you need to create the database with:
+
+    cd cogs
+    python pricechecker.py
+
+This is run because the bot could be invited to multiple servers, and having users need to re-set their favoured league each time the bot is restarted is tiresome.
 
 After this, you should be able to run the bot with:
 
     python main.py
 
-Finally, if you haven't set `base_server` in config.py call the bot from your server:
+Finally, each user may set their own league, assuming the same bot is on a different server, the setting will follow them too.
 
     .set_league <league>
 
-As of writing this, the leagues are as follows: Bestiary, Standard, Bestiary Hardcore, Standard Hardcore, Flashback, Flashback Hardcore
+As of writing this, the leagues are as follows: Bestiary, Standard, Bestiary Hardcore, Hardcore
+
+
+## Notes
+
+You can import the entirety of the pricechecker into your own bot by copying `pricecheker.py` and `helpers.py`, you should take heed in the project stucture since pricechecker imports helpers.
+

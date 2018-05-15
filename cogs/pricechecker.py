@@ -16,8 +16,6 @@ from discord.ext import commands
 from discord.embeds import Embed
 import requests
 
-import helpers
-
 class Database():
     def __init__(self, dbname=os.path.join("db", "database.db")):
         self.dbname = dbname
@@ -58,7 +56,7 @@ class PriceChecker():
 
     @commands.command(pass_context=True, help="Pricecheck - Searches poe.ninja for the rough pricing for many items")
     async def pc(self, ctx, *args):
-        item = helpers.titlecase(args)
+        item = self.titlecase(args)
         message = await self.bot.say(f"Checking poe.ninja for the price of {item}...")
         user = str(ctx.message.author.id)
         if self.check_user_exists(user):
@@ -182,6 +180,17 @@ class PriceChecker():
             return [x.get("id") for x in r.get("result")]
         else:
             return []
+
+    def titlecase(self, tp):
+        # Converts a tuple of strings to titlecasing (Each string should be 1 word)
+        # e.g. hand of wisdom and action --> Hand of Wisdom and Action
+        tp = [x.lower() for x in tp]  # Convert to list so we can do reassignment
+        for i in range(len(tp)):
+            if i == 0 or tp[i] not in ["of", "and", "the", "to", "at", "for"]:
+                tp[i] = tp[i][0].upper() + tp[i][1:]
+            else:
+                continue
+        return " ".join(tp)
 
 def setup(bot):
     bot.add_cog(PriceChecker(bot))

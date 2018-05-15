@@ -51,13 +51,6 @@ Since I am lazy and haven't created a setup script, you need to do this yourself
 In the root folder, create the following directories:
 
     images
-    
-Then you need to create the database with:
-
-    cd cogs
-    python pricechecker.py
-
-This is run because the bot could be invited to multiple servers, and having users need to re-set their favoured league each time the bot is restarted is tiresome.
 
 After this, you should be able to run the bot with:
 
@@ -72,5 +65,8 @@ As of writing this, the leagues are as follows: Bestiary, Standard, Bestiary Har
 
 ## Notes
 
-You can import the entirety of the pricechecker into your own bot by copying `pricecheker.py` and `helpers.py`, you should take heed in the project stucture since pricechecker imports helpers.
+You can import the entirety of the pricechecker into your own bot by copying `pricecheker.py` to your cogs directory
+and import with 
+    
+    bot.load_extension("<path to pricechecker.py>")
 

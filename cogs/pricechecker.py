@@ -1,3 +1,13 @@
+"""
+original author: Left
+github: https://github.com/Leftn
+gitlab: https://gitlab.com/g_
+reddit: http://reddit.com/u/Leftn
+tracker: af4get6hn3m910ffi4ue92id1efj0a12
+
+If you copy just this file, please do not modify this, i'd like to know how much my code is being used.
+"""
+
 import json
 import os
 import sqlite3
@@ -5,9 +15,6 @@ import sqlite3
 from discord.ext import commands
 from discord.embeds import Embed
 import requests
-
-import helpers
-import config
 
 class Database():
     def __init__(self, dbname=os.path.join("db", "database.db")):
@@ -49,7 +56,7 @@ class PriceChecker():
 
     @commands.command(pass_context=True, help="Pricecheck - Searches poe.ninja for the rough pricing for many items")
     async def pc(self, ctx, *args):
-        item = helpers.titlecase(args)
+        item = self.titlecase(args)
         message = await self.bot.say(f"Checking poe.ninja for the price of {item}...")
         user = str(ctx.message.author.id)
         if self.check_user_exists(user):
@@ -69,7 +76,7 @@ class PriceChecker():
 
     @commands.command(pass_context=True)
     async def set_league(self, ctx, *args):
-        league = helpers.titlecase(args)
+        league = " ".join(args)
         if league in self.get_league_list():
             user = str(ctx.message.author.id)
             if self.check_user_exists(user):
@@ -174,6 +181,17 @@ class PriceChecker():
         else:
             return []
 
+    def titlecase(self, tp):
+        # Converts a tuple of strings to titlecasing (Each string should be 1 word)
+        # e.g. hand of wisdom and action --> Hand of Wisdom and Action
+        tp = [x.lower() for x in tp]  # Convert to list so we can do reassignment
+        for i in range(len(tp)):
+            if i == 0 or tp[i] not in ["of", "and", "the", "to", "at", "for"]:
+                tp[i] = tp[i][0].upper() + tp[i][1:]
+            else:
+                continue
+        return " ".join(tp)
+
 def setup(bot):
     bot.add_cog(PriceChecker(bot))
 
@@ -183,6 +201,6 @@ if __name__ == "__main__":
     try:
         db = Database(path)
     except sqlite3.OperationalError:
-        os.mkdir(path)
+        os.mkdir(os.path.join("..", "db"))
         db = Database(path)
     db.create_tables()

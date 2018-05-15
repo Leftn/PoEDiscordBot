@@ -1,3 +1,13 @@
+"""
+original author: Left
+github: https://github.com/Leftn
+gitlab: https://gitlab.com/g_
+reddit: http://reddit.com/u/Leftn
+tracker: af4get6hn3m910ffi4ue92id1efj0a12
+
+If you copy just this file, please do not modify this, i'd like to know how much my code is being used.
+"""
+
 import json
 import os
 import sqlite3
@@ -7,7 +17,6 @@ from discord.embeds import Embed
 import requests
 
 import helpers
-import config
 
 class Database():
     def __init__(self, dbname=os.path.join("db", "database.db")):

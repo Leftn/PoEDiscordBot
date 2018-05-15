@@ -78,7 +78,7 @@ class PriceChecker():
 
     @commands.command(pass_context=True)
     async def set_league(self, ctx, *args):
-        league = helpers.titlecase(args)
+        league = " ".join(args)
         if league in self.get_league_list():
             user = str(ctx.message.author.id)
             if self.check_user_exists(user):
@@ -192,6 +192,6 @@ if __name__ == "__main__":
     try:
         db = Database(path)
     except sqlite3.OperationalError:
-        os.mkdir(path)
+        os.mkdir(os.path.join("..", "db"))
         db = Database(path)
     db.create_tables()

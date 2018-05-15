@@ -52,6 +52,11 @@ In the root folder, create the following directories:
 
     images
 
+You then need to initialise the database with:
+
+    cd cogs
+    python pricechecker.py
+
 After this, you should be able to run the bot with:
 
     python main.py
@@ -60,8 +65,7 @@ Finally, each user may set their own league, assuming the same bot is on a diffe
 
     .set_league <league>
 
-As of writing this, the leagues are as follows: Bestiary, Standard, Bestiary Hardcore, Hardcore
-
+It should be noted that when setting a league, the input is case sensitive
 
 ## Notes
 

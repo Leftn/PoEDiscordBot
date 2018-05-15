@@ -52,7 +52,6 @@ class PriceChecker():
     def __init__(self, bot):
         self.bot = bot
         self.db = Database()
-        c = self.db.cursor()
 
     @commands.command(pass_context=True, help="Pricecheck - Searches poe.ninja for the rough pricing for many items")
     async def pc(self, ctx, *args):
@@ -86,7 +85,7 @@ class PriceChecker():
                 self.add_user(user, league, name)
             await self.bot.say(f"Successfully set your league to: {league}")
         else:
-            await self.bot.say(f"League '{league}' not a playable league")
+            await self.bot.say(f"League '{league}' not a playable league (Case sensitive)")
             string_league = "\n".join(self.get_league_list()) # Just makes a list of strings to a string seperated by \n
             await self.bot.say(f"Here is the full list of leagues:\n`{string_league}`")
 
@@ -133,7 +132,12 @@ class PriceChecker():
         elif item_type == "map":
             embed.add_field(name="Tier", value=data.get("tier"))
             embed.add_field(name="Atlas", value=data.get("atlas"))
-        if item_type != "currency":
+        elif item_type == "flask":
+            if data.get("legacy") == 0:
+                embed.add_field(name="Legacy", value="No")
+            else:
+                embed.add_field(name="Legacy", value="Yes")
+        if data.get("image"):
             embed.set_image(url=data.get("image"))
         return embed
 

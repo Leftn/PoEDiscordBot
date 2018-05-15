@@ -6,19 +6,8 @@ from discord.ext import commands
 import config, helpers, screenshot
 
 bot = commands.Bot(command_prefix=".")
+startup_extensions = ["pricechecker"]
 
-try:
-    league = {config.base_server:"Standard"} # Don't need to have this set
-except AttributeError:
-    league = {}
-
-def _set_league(server, new_league):
-    global league
-    league.update({server:new_league})
-
-def _get_league(server):
-    global league
-    return league.get(server)
 
 @bot.command(pass_context=True)
 async def get(ctx, *args):
@@ -36,28 +25,14 @@ async def get(ctx, *args):
         await bot.say(f"Could not find {item}")
 
 
-@bot.command(pass_context=True)
-async def pc (ctx, *args):
-    item = helpers.titlecase(args)
-    message = await bot.say(f"Checking poe.ninja for the price of {item}...")
-    data = helpers.pricecheck(item, _get_league(ctx.message.server))
-    await bot.delete_message(message)
-    for element in data:
-        embed = helpers.create_embed_pricing(element)
-        await bot.say(embed=embed)
-
-@bot.command(pass_context=True)
-async def set_league(ctx, *args): #TODO: Determine if this command should be protected
-    name = helpers.titlecase(args)
-    if name in config.leagues:
-        server = ctx.message.server
-        _set_league(server, name)
-        await bot.say(f"Successfully set default league to: {name}")
-    else:
-        await bot.say(f"League '{name}' not a playable league")
-
-
 if __name__ == "__main__":
     print("Use the following url to connect the bot to your server:")
     print(oauth_url(config.client_id))
+
+    for extension in startup_extensions:
+        try:
+            bot.load_extension("cogs."+extension)
+        except Exception as e:
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('Failed to load extension {}\n{}'.format(extension, exc))
     bot.run(config.token_secret)

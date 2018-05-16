@@ -8,6 +8,9 @@ Since the bot maintainer appears to be inactive, and I have a new idea for some 
 * Wiki Item retrieval (.get)
 * poe.ninja pricecheck (.pc)
 
+
+![Heart](/Examples/KaomsHeart.png?raw=true "Kaom's Heart")
+
 ### Quite notice
 
 As of 12-05-2018 running chrome in headless mode is signifigantly slower than other browsers (Takes ~30s to get a screenshot of a page), the only other browser which is supported is PhantomJS which is being depreciated by selenium.

@@ -10,6 +10,7 @@ If you copy just this file, please do not modify this, i'd like to know how much
 
 import json
 import os
+import difflib
 import sqlite3
 
 from discord.ext import commands
@@ -67,7 +68,8 @@ class PriceChecker():
                     embed = self.create_embed_pricing(element)
                     await self.bot.say(embed=embed)
             else:
-                await self.bot.say(f"Could not find item: {item}")
+                suggested = self.get_suggested_item(item)
+                await self.bot.say("Could not find item: {}\nDid you mean:\n{}".format(item, "\n".join(suggested)))
         else:
             await self.bot.delete_message(message)
             await self.bot.say("Your preffered league is not currently set, please use `{}` to set the current league".format(self.bot.command_prefix+"set_league"))
@@ -195,6 +197,11 @@ class PriceChecker():
             else:
                 continue
         return " ".join(tp)
+
+    def get_suggested_item(self, item):
+        all_names = requests.get("http://45.76.116.155/api/v1/names").json()
+        return difflib.get_close_matches(item, all_names)
+
 
 def setup(bot):
     bot.add_cog(PriceChecker(bot))

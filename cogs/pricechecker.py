@@ -206,15 +206,16 @@ class PriceChecker():
 def setup(bot):
     bot.add_cog(PriceChecker(bot))
 
-def main():
+def main(path=os.path.join("db")):
     # We want to create the database directory in the top level
-    path = os.path.join("..","db", "database.db")
+    db_path = os.path.join(path, "database.db")
     try:
-        db = Database(path)
+        db = Database(db_path)
     except sqlite3.OperationalError:
-        os.mkdir(os.path.join("..", "db"))
-        db = Database(path)
+        os.mkdir(path)
+        db = Database(db_path)
     db.create_tables()
 
 if __name__ == "__main__":
-    main()
+    path = os.path.join("..","db")
+    main(path)

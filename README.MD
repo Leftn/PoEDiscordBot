@@ -7,6 +7,7 @@ Since the bot maintainer appears to be inactive, and I have a new idea for some 
 
 * Wiki Item retrieval (.get)
 * poe.ninja pricecheck (.pc)
+* Ladder viewer (.top5)
 
 
 ![Heart](/Examples/KaomsHeart.png?raw=true "Kaom's Heart")
@@ -18,6 +19,10 @@ There is also a basic spellchecker for the pricechecker
 The bot also has support for getting the wiki article of most items
 
 ![Get](/Examples/GetUsage.png "Get Usage")
+
+Newest feature involves retrieving data from the leaderboards, at the moment, it only supports getting the top 5 of any given league.
+
+![Leaderboards](/Examples/Leaderboards.png "Leaderboards Example")
 
 ### Quite notice
 
@@ -57,17 +62,9 @@ For now, there is no way to automate which leagues are available, so they need t
 
 ### BEFORE YOU RUN
 
-Since I am lazy and haven't created a setup script, you need to do this yourself.
+You need to run the setup script with:
 
-In the root folder, create the following directories:
-
-    mkdir images
-    mkdir logs
-
-You then need to initialise the database with:
-
-    cd cogs
-    python pricechecker.py
+    python setup.py
 
 After this, you should be able to run the bot with:
 

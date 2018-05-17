@@ -17,6 +17,7 @@ try:
     import PIL
 except ImportError:
     install("Pillow")
+
 os.mkdir("db")
 os.mkdir("logs")
 os.mkdir("images")

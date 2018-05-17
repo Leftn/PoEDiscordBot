@@ -7,7 +7,7 @@ from discord.ext import commands
 import config, helpers, screenshot
 
 bot = commands.Bot(command_prefix=".")
-startup_extensions = ["pricechecker"]
+startup_extensions = ["pricechecker", "leaderboards"]
 
 log = logging.getLogger("main")
 log.setLevel(config.log_level)

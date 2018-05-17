@@ -1,22 +1,36 @@
+from discord.embeds import Embed
 from discord.ext import commands
 import requests
-
-import helpers
 
 class Leaderboards():
     def __init__(self, bot):
         self.bot = bot
+        self.league_list = self.get_league_list()
 
     @commands.command()
-    async def top10(self, *args):
+    async def top5(self, *args):
         if args:
-            if args[0] in self.get_league_list():
-                data = self.get_leaderboard(args[0], 10)
-        else:
-            await self.bot.say("You must specify a league to search")
+            if " ".join(args) in self.league_list:
+                data = self.get_leaderboard(" ".join(args), 5)
+                for player in data:
+                    await self.bot.say(embed=self.create_embed(player))
+            else:
+                await self.bot.say("{} is not a valid league, please choose one from: \n`{}`".format(" ".join(args), "\n".join(self.league_list)))
 
-    def create_embed(self, data):
-        pass
+        else:
+            await self.bot.say("You must specify a league to search, please choose one of: \n`{}`".format("\n".join(self.league_list)))
+
+    def create_embed(self, player):
+        embed = Embed(colour=0x4f1608)
+        embed.add_field(name="Name", value=player.get("name"))
+        embed.add_field(name="Rank", value=player.get("rank"))
+        embed.add_field(name="\u200b", value="\u200b") # Empty field to make spacing of the object look much nicer
+        embed.add_field(name="Level", value=player.get("level"))
+        embed.add_field(name="Class", value=player.get("class"))
+        embed.add_field(name="Alive", value=not player.get("dead"))
+        if player.get("twitch"):
+            embed.set_author(name=player.get("twitch"), url="https://www.twitch.tv/"+player.get("twitch"), icon_url="https://cdn1.iconfinder.com/data/icons/micon-social-pack/512/twitch-256.png")
+        return embed
 
     def get_league_list(self):
         # This is a static method, but I am unsure which scope is best to place this method, so for now, it stays here
@@ -44,8 +58,8 @@ class Leaderboards():
                     "class":x.get("character").get("class"),
                     "dead":x.get("dead")
                 }
-            if x.get("twitch"):
-                d.update({"twitch":x.get("twitch").get("name")})
+            if x.get("account").get("twitch"):
+                d.update({"twitch":x.get("account").get("twitch").get("name")})
             return_list.append(d)
         return return_list
 

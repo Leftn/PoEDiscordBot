@@ -7,7 +7,7 @@ class Leaderboards():
         self.bot = bot
         self.league_list = self.get_league_list()
 
-    @commands.command()
+    @commands.command(help="Retrieves the top 5 leaderboard rankings of a specified league")
     async def top5(self, *args):
         if args:
             if " ".join(args) in self.league_list:

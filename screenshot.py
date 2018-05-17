@@ -4,7 +4,7 @@ from urllib.parse import quote
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.options import Options
-import requests
+from selenium.common.exceptions import NoSuchElementException
 from PIL import Image
 
 import config
@@ -16,6 +16,9 @@ def get_element_screenshot(element:WebElement, save_name):
     :param element: selenium web element object
     :return: Image: PIL object of the specified web element
     """
+    if not element:
+        return None
+
     driver = element._parent
     driver.save_screenshot(f"images/{save_name}.png")
     x = element.location["x"]
@@ -31,7 +34,10 @@ def get_element_screenshot(element:WebElement, save_name):
         return None
 
 def get_element_box(driver):
-    e = driver.find_element_by_class_name("item-box")
+    try:
+        e = driver.find_element_by_class_name("item-box")
+    except NoSuchElementException:
+        return None
     if not e.size["width"] and not e.size["height"]: # Check if item-box is hidden
         e = driver.find_element_by_class_name("infocard")
     return e

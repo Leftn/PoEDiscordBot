@@ -1,7 +1,6 @@
 from urllib.parse import quote
-import logging
+import logging.handlers
 
-from discord.message import Message
 from discord.utils import oauth_url
 from discord.ext import commands
 

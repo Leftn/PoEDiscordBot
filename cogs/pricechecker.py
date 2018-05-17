@@ -206,7 +206,7 @@ class PriceChecker():
 def setup(bot):
     bot.add_cog(PriceChecker(bot))
 
-if __name__ == "__main__":
+def main():
     # We want to create the database directory in the top level
     path = os.path.join("..","db", "database.db")
     try:
@@ -215,3 +215,6 @@ if __name__ == "__main__":
         os.mkdir(os.path.join("..", "db"))
         db = Database(path)
     db.create_tables()
+
+if __name__ == "__main__":
+    main()

@@ -61,7 +61,8 @@ Since I am lazy and haven't created a setup script, you need to do this yourself
 
 In the root folder, create the following directories:
 
-    images
+    mkdir images
+    mkdir logs
 
 You then need to initialise the database with:
 

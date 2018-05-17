@@ -24,7 +24,7 @@ if config.log_filename is not None and __name__ == "__main__":
 
 @bot.event
 async def on_message(message):
-    if message.content[0] == str(bot.command_prefix):
+    if message.content and message.content[0] == str(bot.command_prefix):
         log.info("Message: "+message.content)
     await bot.process_commands(message)
 

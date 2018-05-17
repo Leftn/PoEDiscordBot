@@ -1,5 +1,7 @@
 from urllib.parse import quote
+import logging
 
+from discord.message import Message
 from discord.utils import oauth_url
 from discord.ext import commands
 
@@ -7,6 +9,25 @@ import config, helpers, screenshot
 
 bot = commands.Bot(command_prefix=".")
 startup_extensions = ["pricechecker"]
+
+log = logging.getLogger("main")
+log.setLevel(config.log_level)
+log_formatter = logging.Formatter('%(levelname)s: %(message)s')
+log_formatter_file = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+log_stderrHandler = logging.StreamHandler()
+log_stderrHandler.setFormatter(log_formatter)
+log.addHandler(log_stderrHandler)
+if config.log_filename is not None and __name__ == "__main__":
+    log_fileHandler = logging.handlers.RotatingFileHandler(config.log_filename, maxBytes=config.log_maxsize, backupCount=config.log_backup_count)
+    log_fileHandler.setFormatter(log_formatter_file)
+    log.addHandler(log_fileHandler)
+
+
+@bot.event
+async def on_message(message):
+    # do some extra stuff here
+    log.info("Message: "+message.content)
+    await bot.process_commands(message)
 
 
 @bot.command(pass_context=True)

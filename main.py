@@ -48,7 +48,7 @@ async def get(ctx, *args):
 if __name__ == "__main__":
     print("Use the following url to connect the bot to your server:")
     print(oauth_url(config.client_id))
-
+    print("Your bot is being used in {} server{}".format(len(bot.servers), "s"*int(len(bot.servers/len(bot.servers)))))
     for extension in startup_extensions:
         try:
             bot.load_extension("cogs."+extension)

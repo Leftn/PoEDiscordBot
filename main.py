@@ -1,5 +1,6 @@
 from urllib.parse import quote
 import logging.handlers
+import time
 
 from discord.utils import oauth_url
 from discord.ext import commands
@@ -46,13 +47,18 @@ async def get(ctx, *args):
 
 
 if __name__ == "__main__":
-    print("Use the following url to connect the bot to your server:")
-    print(oauth_url(config.client_id))
-    print("Your bot is being used in {} server{}".format(len(bot.servers), "s"*int(len(bot.servers/len(bot.servers)))))
-    for extension in startup_extensions:
+    while True:
         try:
-            bot.load_extension("cogs."+extension)
+            print("Use the following url to connect the bot to your server:")
+            print(oauth_url(config.client_id))
+            print("Your bot is being used in {} server{}".format(len(bot.servers), "s"*int(len(bot.servers)/len(bot.servers))))
+            for extension in startup_extensions:
+                try:
+                    bot.load_extension("cogs."+extension)
+                except Exception as e:
+                    exc = '{}: {}'.format(type(e).__name__, e)
+                    print('Failed to load extension {}\n{}'.format(extension, exc))
+            bot.run(config.token_secret)
         except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load extension {}\n{}'.format(extension, exc))
-    bot.run(config.token_secret)
+            log.error(f"Exception: {e.with_traceback()}")
+        time.sleep(60)

@@ -1,0 +1,36 @@
+[INFO  - 2018-05-04T10:54:23.129Z] GhostDriver - Main - running on port 56649
+[INFO  - 2018-05-04T10:54:23.839Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2018-05-04T10:54:23.840Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - page.customHeaders:  - {}
+[INFO  - 2018-05-04T10:54:23.841Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"linux-unknown-64bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2018-05-04T10:54:23.841Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 819a5850-4f89-11e8-b0d0-bf4d0c48021c
+[ERROR - 2018-05-04T10:54:27.155Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - page.onError - msg: ReferenceError: Can't find variable: Promise
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-05-04T10:54:27.156Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - page.onError - stack:
+  exports (https://cdm.cursecdn.com/js/landscape/landscape_min.js:1)
+  value (https://cdm.cursecdn.com/js/landscape/landscape_min.js:1)
+  value (https://cdm.cursecdn.com/js/landscape/landscape_min.js:1)
+  (anonymous function) (https://cdm.cursecdn.com/js/landscape/landscape_min.js:1)
+  i (https://cdm.cursecdn.com/js/landscape/landscape_min.js:1)
+  t (https://cdm.cursecdn.com/js/landscape/landscape_min.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-05-04T10:54:29.032Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - page.onError - msg: Exception in queued GPT command TypeError: undefined is not a function (evaluating 'd.adZones.find(function(t){return t.zone===e})')
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-05-04T10:54:29.033Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - page.onError - stack:
+  push (https://securepubads.g.doubleclick.net/gpt/pubads_impl_199.js:1)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-05-04T10:54:29.040Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - page.onError - msg: ReferenceError: Can't find variable: Promise
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-05-04T10:54:29.040Z] Session [819a5850-4f89-11e8-b0d0-bf4d0c48021c] - page.onError - stack:
+  exports (https://cdm.cursecdn.com/js/landscape/landscape_min.js:1)
+  value (https://cdm.cursecdn.com/js/landscape/landscape_min.js:1)
+  runAuction (https://cdm.cursecdn.com/js/gamepedia/cdmfactorem_min.js?misc=1525431266844:2)
+
+  phantomjs://platform/console++.js:263 in error
+[ERROR - 2018-05-04T10:54:32.479Z] WebElementLocator - _handleLocateCommand - Element(s) NOT Found: GAVE UP. Search Stop Time: 1525431272399
+
+  phantomjs://platform/console++.js:263 in error

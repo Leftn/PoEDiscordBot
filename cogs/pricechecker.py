@@ -16,38 +16,7 @@ import sqlite3
 from discord.ext import commands
 from discord.embeds import Embed
 import requests
-
-class Database():
-    def __init__(self, dbname=os.path.join("db", "database.db")):
-        self.dbname = dbname
-        self.conn = sqlite3.connect(self.dbname, check_same_thread=False)
-        self.conn.text_factory = str
-
-    def connection(self, dbname):
-        conn = sqlite3.connect(dbname)
-        return conn
-
-    def cursor(self):
-        return self.conn.cursor()
-
-    def commit(self):
-        self.conn.commit()
-
-    def create_tables(self):
-        cursor = self.cursor()
-        sql = """
-        DROP TABLE IF EXISTS server;
-
-        CREATE TABLE user
-        (
-            user_id integer PRIMARY KEY AUTOINCREMENT,
-            user_name text,
-            user_league text
-        );
-        """
-        cursor.executescript(sql)
-        self.commit()
-
+from database import Database
 
 class PriceChecker():
     def __init__(self, bot):
@@ -59,8 +28,8 @@ class PriceChecker():
         item = self.titlecase(args)
         message = await self.bot.say(f"Checking poe.ninja for the price of {item}...")
         user = str(ctx.message.author.id)
-        if self.check_user_exists(user):
-            data = self.pricecheck(item, self.get_league(user))
+        if self.db.check_user_exists(user):
+            data = self.pricecheck(item, self.db.get_league(user))
             await self.bot.delete_message(message)
             if data:
                 await self.bot.say("*" + data[0].get("name") + "* in **" + data[0].get("league") + "**")
@@ -78,17 +47,17 @@ class PriceChecker():
     @commands.command(pass_context=True)
     async def set_league(self, ctx, *args):
         league = " ".join(args)
-        if league in self.get_league_list():
+        if league in self.db.get_league_list():
             user = str(ctx.message.author.id)
-            if self.check_user_exists(user):
-                self.set_league_db(user, league)
+            if self.db.check_user_exists(user):
+                self.db.set_league_db(user, league)
             else:
                 name = str(ctx.message.author.name)
-                self.add_user(user, league, name)
+                self.db.add_user(user, league, name)
             await self.bot.say(f"Successfully set your league to: {league}")
         else:
             await self.bot.say(f"League '{league}' not a playable league (Case sensitive)")
-            string_league = "\n".join(self.get_league_list()) # Just makes a list of strings to a string seperated by \n
+            string_league = "\n".join(self.db.get_league_list()) # Just makes a list of strings to a string seperated by \n
             await self.bot.say(f"Here is the full list of leagues:\n`{string_league}`")
 
     def pricecheck(self, item, league):
@@ -143,49 +112,6 @@ class PriceChecker():
             embed.set_image(url=data.get("image"))
         return embed
 
-    def set_league_db(self, server, league):
-        sql = "UPDATE user SET user_league = ? WHERE user_id = ?"
-        self.db.cursor().execute(sql, (league, server))
-        self.db.commit()
-
-    def add_user(self, user, league="Standard", name=""):
-        sql = "INSERT INTO user(user_id, user_league, user_name) VALUES (?, ?, ?)"
-        self.db.cursor().execute(sql, (user, league, name))
-        self.db.commit()
-
-    def get_league(self, user):
-        sql = "SELECT user_league FROM user WHERE user_id = ?"
-        cursor = self.db.cursor()
-        cursor.execute(sql, (user,))
-        data = cursor.fetchone()
-        if data:
-            return data[0]
-        else:
-            return None
-
-    def check_user_exists(self, user):
-        sql = "SELECT * FROM user WHERE user_id = ?"
-        cursor = self.db.cursor()
-        cursor.execute(sql, (user,))
-        data = cursor.fetchone()
-        if data:
-            return True
-        else:
-            return False
-
-    def get_league_list(self):
-        # This is a static method, but I am unsure which scope is best to place this method, so for now, it stays here
-        """
-        This gets a list of leagues from the official site api
-        
-        :return: list of strings
-        """
-        url = "http://www.pathofexile.com/api/trade/data/leagues"
-        r = requests.get(url).json()
-        if r.get("result"):
-            return [x.get("id") for x in r.get("result")]
-        else:
-            return []
 
     def titlecase(self, tp):
         # Converts a tuple of strings to titlecasing (Each string should be 1 word)
@@ -205,17 +131,3 @@ class PriceChecker():
 
 def setup(bot):
     bot.add_cog(PriceChecker(bot))
-
-def main(path=os.path.join("db")):
-    # We want to create the database directory in the top level
-    db_path = os.path.join(path, "database.db")
-    try:
-        db = Database(db_path)
-    except sqlite3.OperationalError:
-        os.mkdir(path)
-        db = Database(db_path)
-    db.create_tables()
-
-if __name__ == "__main__":
-    path = os.path.join("..","db")
-    main(path)

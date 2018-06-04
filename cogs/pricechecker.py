@@ -9,9 +9,7 @@ If you copy just this file, please do not modify this, i'd like to know how much
 """
 
 import json
-import os
 import difflib
-import sqlite3
 
 from discord.ext import commands
 from discord.embeds import Embed

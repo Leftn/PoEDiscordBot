@@ -55,6 +55,9 @@ You must set the following for the bot to work:
 
     client_id = ""
     token_secret =""
+    
+If you somehow want to also use the .get command, you need to install either chrome or phantomJS
+If you use chrome, you must also add the `driver_executable` variable to the location of the chromedriver executable.
 
 Somehow I managed to delete config forever and I am not good enough at git to add it back in whilst also keeping it .gitignored.
 So I will put the default config values here...

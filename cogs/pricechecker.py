@@ -39,7 +39,7 @@ class PriceChecker():
                 await self.bot.say("Could not find item: {}\nDid you mean:\n{}".format(item, "\n".join(suggested)))
         else:
             await self.bot.delete_message(message)
-            await self.bot.say("Your preffered league is not currently set, please use `{}` to set the current league".format(self.bot.command_prefix+"set_league"))
+            await self.bot.say("Your preffered league is not currently set, please use `{}` to set the current league".format(self.bot.command_prefix+"set_league <league>"))
 
 
     @commands.command(pass_context=True)

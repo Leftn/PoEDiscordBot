@@ -16,7 +16,7 @@ class Leaderboards():
                 for player in data:
                     await self.bot.say(embed=self.create_embed(player))
         else:
-            await self.bot.say(f"You have not set your league, please set it with {self.bot.command_prefix}set_league")
+            await self.bot.say(f"You have not set your league, please set it with `{self.bot.command_prefix}set_league <league>`")
 
     def create_embed(self, player):
         embed = Embed(colour=0x4f1608)

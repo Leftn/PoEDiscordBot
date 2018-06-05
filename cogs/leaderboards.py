@@ -1,24 +1,22 @@
 from discord.embeds import Embed
 from discord.ext import commands
 import requests
+from database import Database
 
 class Leaderboards():
     def __init__(self, bot):
         self.bot = bot
-        self.league_list = self.get_league_list()
+        self.db = Database()
 
-    @commands.command(help="Retrieves the top 5 leaderboard rankings of a specified league")
-    async def top5(self, *args):
-        if args:
-            if " ".join(args) in self.league_list:
-                data = self.get_leaderboard(" ".join(args), 5)
+    @commands.command(pass_context=True, help="Retrieves the top 5 leaderboard rankings of a specified league")
+    async def top5(self, ctx):
+        league = self.db.get_league(ctx.message.author.id)
+        if league:
+                data = self.get_leaderboard(league, 5)
                 for player in data:
                     await self.bot.say(embed=self.create_embed(player))
-            else:
-                await self.bot.say("{} is not a valid league, please choose one from: \n`{}`".format(" ".join(args), "\n".join(self.league_list)))
-
         else:
-            await self.bot.say("You must specify a league to search, please choose one of: \n`{}`".format("\n".join(self.league_list)))
+            await self.bot.say(f"You have not set your league, please set it with {self.bot.command_prefix}set_league")
 
     def create_embed(self, player):
         embed = Embed(colour=0x4f1608)
@@ -27,7 +25,7 @@ class Leaderboards():
         embed.add_field(name="\u200b", value="\u200b") # Empty field to make spacing of the object look much nicer
         embed.add_field(name="Level", value=player.get("level"))
         embed.add_field(name="Class", value=player.get("class"))
-        embed.add_field(name="Alive", value=not player.get("dead"))
+        embed.add_field(name="Alive", value=str(not player.get("dead")))
         if player.get("twitch"):
             embed.set_author(name=player.get("twitch"), url="https://www.twitch.tv/"+player.get("twitch"), icon_url="https://cdn1.iconfinder.com/data/icons/micon-social-pack/512/twitch-256.png")
         return embed

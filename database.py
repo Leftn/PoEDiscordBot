@@ -22,7 +22,7 @@ class Database():
     def create_tables(self):
         cursor = self.cursor()
         sql = """
-        DROP TABLE IF EXISTS server;
+        DROP TABLE IF EXISTS user;
 
         CREATE TABLE user
         (

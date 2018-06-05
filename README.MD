@@ -41,11 +41,9 @@ I do not recommend using the `.get` command because of this until google have fi
 ### Installation
 
     
-    sudo pip install selenium
-    sudo pip install discord.py
-    sudo pip install Pillow
+    sudo python setup.py
 
-At the moment, only phantomjs and chrome are supported. Firefox coming soon.
+At the moment, only phantomjs and chrome are supported. Firefox coming Soon™.
 
 If you use chrome: https://sites.google.com/a/chromium.org/chromedriver/
 

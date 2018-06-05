@@ -57,7 +57,25 @@ You must set the following for the bot to work:
     client_id = ""
     token_secret =""
 
-For now, there is no way to automate which leagues are available, so they need to be manually altered for your server
+Somehow I managed to delete config forever and I am not good enough at git to add it back in whilst also keeping it .gitignored.
+So I will put the default config values here...
+
+
+    import os, logging
+    
+    browser_height = 2500
+    browser_width = 2500
+    excluded_titlecase_words = ["of", "and", "the", "to", "at", "for"]
+    driver_executable = ""
+    browser = "chrome"
+    client_id = ""
+    token_secret = ""
+    wiki = "https://pathofexile.gamepedia.com/{}"
+    
+    log_level = logging.INFO
+    log_filename = os.path.join("logs","main.log")
+    log_maxsize = 1024 * 256
+    log_backup_count = 5
 
 
 ### BEFORE YOU RUN
@@ -75,11 +93,3 @@ Finally, each user may set their own league, assuming the same bot is on a diffe
     .set_league <league>
 
 It should be noted that when setting a league, the input is case sensitive
-
-## Notes
-
-You can import the entirety of the pricechecker into your own bot by copying `pricecheker.py` to your cogs directory
-and import with 
-    
-    bot.load_extension("<path to pricechecker.py>")
-

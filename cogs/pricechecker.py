@@ -101,6 +101,13 @@ class PriceChecker():
         elif item_type == "map":
             embed.add_field(name="Tier", value=data.get("tier"))
             embed.add_field(name="Atlas", value=data.get("atlas"))
+        elif item_type == "gem":
+            embed.add_field(name="Level", value=data.get("gem_level"))
+            embed.add_field(name="Quality", value=data.get("gem_quality"))
+            if data.get("gem_corrupted") == 1:
+                embed.add_field(name="Corrupted", value="True")
+            else:
+                embed.add_field(name="Corrupted", value="False")
         elif item_type == "flask":
             if data.get("legacy") == 0:
                 embed.add_field(name="Legacy", value="No")

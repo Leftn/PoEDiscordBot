@@ -21,6 +21,7 @@ The bot also has support for getting the wiki article of most items
 ![Get](/Examples/GetUsage.png "Get Usage")
 
 Newest feature involves retrieving data from the leaderboards, at the moment, it only supports getting the top 5 of any given league.
+It will automatically get what your current league is set as.
 
 ![Leaderboards](/Examples/Leaderboards.png "Leaderboards Example")
 

@@ -10,7 +10,7 @@ class Leaderboards():
 
     @commands.command(pass_context=True, help="Retrieves the top 5 leaderboard rankings of a specified league")
     async def top5(self, ctx):
-        league = self.db.get_league(ctx.message.author.id)
+        league = self.db.get_league(ctx.message.author)
         if league:
                 data = self.get_leaderboard(league, 5)
                 for player in data:

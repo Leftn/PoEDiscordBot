@@ -23,6 +23,14 @@ class Database():
         cursor = self.cursor()
         sql = """
         DROP TABLE IF EXISTS user;
+        DROP TABLE IF EXISTS server;
+        
+        CREATE TABLE server
+        (
+            server_id text PRIMARY KEY,
+            server_name text,
+            server_track_ggg integer
+        );
 
         CREATE TABLE user
         (
@@ -34,20 +42,33 @@ class Database():
         cursor.executescript(sql)
         self.commit()
 
-    def set_league_db(self, server, league):
+    def add_server(self, server):
+        sql = "INSERT INTO server(server_id, server_name, server_track_ggg) VALUES (?, ?, ?)"
+        self.cursor().execute(sql, (server.id, server.name, 1))
+        self.commit()
+
+    def set_server_ggg(self, server, value):
+        sql = "UPDATE server SET server_track_ggg = ? WHERE server_id = ?"
+        self.cursor().execute(sql, (value, server.id))
+        self.commit()
+
+    def get_server_ggg(self, server):
+        pass
+
+    def set_league_db(self, user, league):
         sql = "UPDATE user SET user_league = ? WHERE user_id = ?"
-        self.cursor().execute(sql, (league, server))
+        self.cursor().execute(sql, (league, user.id))
         self.commit()
 
     def add_user(self, user, league="Standard", name=""):
         sql = "INSERT INTO user(user_id, user_league, user_name) VALUES (?, ?, ?)"
-        self.cursor().execute(sql, (user, league, name))
+        self.cursor().execute(sql, (user.id, league, name))
         self.commit()
 
     def get_league(self, user):
         sql = "SELECT user_league FROM user WHERE user_id = ?"
         cursor = self.cursor()
-        cursor.execute(sql, (user,))
+        cursor.execute(sql, (user.id,))
         data = cursor.fetchone()
         if data:
             return data[0]
@@ -57,7 +78,7 @@ class Database():
     def check_user_exists(self, user):
         sql = "SELECT * FROM user WHERE user_id = ?"
         cursor = self.cursor()
-        cursor.execute(sql, (user,))
+        cursor.execute(sql, (user.id,))
         data = cursor.fetchone()
         if data:
             return True

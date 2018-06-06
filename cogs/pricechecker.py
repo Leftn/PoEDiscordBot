@@ -25,7 +25,7 @@ class PriceChecker():
     async def pc(self, ctx, *args):
         item = self.titlecase(args)
         message = await self.bot.say(f"Checking poe.ninja for the price of {item}...")
-        user = str(ctx.message.author.id)
+        user = ctx.message.author
         if self.db.check_user_exists(user):
             data = self.pricecheck(item, self.db.get_league(user))
             await self.bot.delete_message(message)
@@ -46,11 +46,11 @@ class PriceChecker():
     async def set_league(self, ctx, *args):
         league = " ".join(args)
         if league in self.db.get_league_list():
-            user = str(ctx.message.author.id)
+            user = ctx.message.author
             if self.db.check_user_exists(user):
                 self.db.set_league_db(user, league)
             else:
-                name = str(ctx.message.author.name)
+                name = str(user.name)
                 self.db.add_user(user, league, name)
             await self.bot.say(f"Successfully set your league to: {league}")
         else:

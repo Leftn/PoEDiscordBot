@@ -4,6 +4,7 @@ import discord
 import feedparser, hashlib, asyncio
 
 from database import Database
+import config
 
 def clean_html(raw_html):
     """
@@ -44,7 +45,7 @@ class GGGTrackerListener(threading.Thread):
     def __init__(self, bot):
         threading.Thread.__init__(self)
         self.keep_running = True
-        self.timer = Timer(5, self.track_ggg)
+        self.timer = Timer(config.ggg_tracker_interval, self.track_ggg)
         # We still need the instance of the bot to send messages to our listeners
         self.bot = bot
 
@@ -77,4 +78,4 @@ class GGGTrackerListener(threading.Thread):
         items = feed["items"]
         items.sort(key=lambda x: x.published_parsed, reverse=True)  # Sorts items by date, most recent first
         await self.send(items[0])
-        self.timer = Timer(5, self.track_ggg)
+        self.timer = Timer(config.ggg_tracker_interval, self.track_ggg)

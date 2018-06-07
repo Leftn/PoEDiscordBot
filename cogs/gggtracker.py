@@ -33,7 +33,6 @@ class GGGTracker():
 
     @commands.command(pass_context=True, help="Allows the bot to send ggg tracked infomation to the current channel")
     async def enable_ggg_tracker(self, ctx):
-
         if self.check_owner(ctx):
             if self.db.check_server_exists(ctx.message.server):
                 self.db.set_server_ggg(ctx.message.server, 1, ctx.message.channel)

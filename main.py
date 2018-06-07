@@ -59,5 +59,5 @@ if __name__ == "__main__":
                     print('Failed to load extension {}\n{}'.format(extension, exc))
             bot.run(config.token_secret)
         except Exception as e:
-            log.error(f"Exception: {e}")
+            log.error(e)
         time.sleep(60)

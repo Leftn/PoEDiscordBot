@@ -8,6 +8,7 @@ Since the bot maintainer appears to be inactive, and I have a new idea for some 
 * Wiki Item retrieval (.get)
 * poe.ninja pricecheck (.pc)
 * Ladder viewer (.top5)
+* GGG Tracker (.enable/disable_ggg_tracker)
 
 
 ![Heart](/Examples/KaomsHeart.png?raw=true "Kaom's Heart")
@@ -20,10 +21,15 @@ The bot also has support for getting the wiki article of most items
 
 ![Get](/Examples/GetUsage.png "Get Usage")
 
-Newest feature involves retrieving data from the leaderboards, at the moment, it only supports getting the top 5 of any given league.
+Retrieve data from the leaderboards, at the moment, it only supports getting the top 5 of any given league.
 It will automatically get what your current league is set as.
 
 ![Leaderboards](/Examples/Leaderboards.png "Leaderboards Example")
+
+The latest feature lets you to opt-in to allow the bot to post GGG tracked posts to the current channel.
+It can only be activated/deactivated by server owners.
+
+![GGG Tracker](/Examples/GGGTracker.png "GGG Tracker Example")
 
 ### Quite notice
 
@@ -78,6 +84,8 @@ So I will put the default config values here...
     log_filename = os.path.join("logs","main.log")
     log_maxsize = 1024 * 256
     log_backup_count = 5
+    
+    ggg_tracker_interval = 60
 
 
 ### BEFORE YOU RUN

@@ -55,6 +55,11 @@ class Database():
         self.cursor().execute(sql, (value, channel.id, server.id))
         self.commit()
 
+    def remove_server(self, server):
+        sql = "DELETE FROM server WHERE server_id = ?"
+        self.cursor().execute(sql, (server.id,))
+        self.commit()
+
     def check_server_exists(self, server):
         sql = "SELECT * FROM server WHERE server_id = ?"
         cursor = self.cursor()

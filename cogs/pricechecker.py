@@ -10,6 +10,7 @@ If you copy just this file, please do not modify this, i'd like to know how much
 
 import json
 import difflib
+import base64
 
 from discord.ext import commands
 from discord.embeds import Embed
@@ -23,22 +24,30 @@ class PriceChecker():
 
     @commands.command(pass_context=True, help="Pricecheck - Searches poe.ninja for the rough pricing for many items")
     async def pc(self, ctx, *args):
-        item = self.titlecase(args)
-        message = await self.bot.say(f"Checking poe.ninja for the price of {item}...")
         user = ctx.message.author
         if self.db.check_user_exists(user):
-            data = self.pricecheck(item, self.db.get_league(user))
-            await self.bot.delete_message(message)
-            if data:
-                await self.bot.say("*" + data[0].get("name") + "* in **" + data[0].get("league") + "**")
-                for element in data:
-                    embed = self.create_embed_pricing(element)
-                    await self.bot.say(embed=embed)
+            if "\n" in args[0]:
+                print(args[0])
+                data = get_poeprices(args[0], self.db.get_league(user))
+                if data:
+                    embed = self.create_embed_pricing(data)
+                    await self.bot.say("Machine learning estimated price of rare provided by www.poeprices.info", embed=embed)
+                else:
+                    pass
             else:
-                suggested = self.get_suggested_item(item)
-                await self.bot.say("Could not find item: {}\nDid you mean:\n{}".format(item, "\n".join(suggested)))
+                item = self.titlecase(args)
+                message = await self.bot.say(f"Checking poe.ninja for the price of {item}...")
+                data = self.pricecheck(item, self.db.get_league(user))
+                await self.bot.delete_message(message)
+                if data:
+                    await self.bot.say("*" + data[0].get("name") + "* in **" + data[0].get("league") + "**")
+                    for element in data:
+                        embed = self.create_embed_pricing(element)
+                        await self.bot.say(embed=embed)
+                else:
+                    suggested = self.get_suggested_item(item)
+                    await self.bot.say("Could not find item: {}\nDid you mean:\n{}".format(item, "\n".join(suggested)))
         else:
-            await self.bot.delete_message(message)
             await self.bot.say("Your preffered league is not currently set, please use `{}` to set the current league".format(self.bot.command_prefix+"set_league <league>"))
 
 
@@ -86,6 +95,10 @@ class PriceChecker():
         """
         embed = Embed(colour=0x4f1608)
         item_type = data.get("type")
+        if item_type == "rare":
+            embed.add_field(name=f"{data.get('currency').title()} Min", value=data.get("min"))
+            embed.add_field(name=f"{data.get('currency').title()} Max", value=data.get("max"))
+            return embed
         if item_type != "currency":
             embed.add_field(name="Chaos", value=data.get("chaos"))
             embed.add_field(name="Exalted", value=data.get("exalted"))
@@ -117,7 +130,6 @@ class PriceChecker():
             embed.set_image(url=data.get("image"))
         return embed
 
-
     def titlecase(self, tp):
         # Converts a tuple of strings to titlecasing (Each string should be 1 word)
         # e.g. hand of wisdom and action --> Hand of Wisdom and Action
@@ -133,6 +145,23 @@ class PriceChecker():
         all_names = requests.get("http://45.76.116.155/api/v1/names").json()
         return difflib.get_close_matches(item, all_names)
 
+def get_poeprices(item, league):
+    headers = {
+        "Host": "poeprices.info",
+        "Connection": "keep-alive",
+        "Cache-Control": "max-age=0",
+        "Origin": "https://poeprices.info",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
+    }
+    b64_item = base64.b64encode(item.encode("utf-8"), b"-_")
+    url = f"https://poeprices.info/api?l={league}&i={b64_item.decode('utf-8')}"
+    r = requests.get(url, headers=headers, verify=False)
+    data = r.json()
+    if data.get("error") == 0:
+        return {"min":data.get("min"), "max":data.get("max"), "currency":data.get("currency"), "type":"rare"}
+    else:
+        print(f"Error: {data}")
+        return None
 
 def setup(bot):
     bot.add_cog(PriceChecker(bot))

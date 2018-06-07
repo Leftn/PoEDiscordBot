@@ -18,6 +18,11 @@ try:
 except ImportError:
     install("Pillow")
 
+try:
+    import feedparser
+except ImportError:
+    install("feedparser")
+
 os.mkdir("db")
 os.mkdir("logs")
 os.mkdir("images")

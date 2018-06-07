@@ -22,16 +22,16 @@ class PriceChecker():
         self.bot = bot
         self.db = Database()
 
-    @commands.command(pass_context=True, help="Pricecheck - Searches poe.ninja for the rough pricing for many items")
+    @commands.command(pass_context=True, help="Pricecheck - Searches poe.ninja/poeprices.info for the rough pricing for many items")
     async def pc(self, ctx, *args):
         user = ctx.message.author
         if self.db.check_user_exists(user):
             if "\n" in args[0]:
-                print(args[0])
                 data = get_poeprices(args[0], self.db.get_league(user))
                 if data:
                     embed = self.create_embed_pricing(data)
-                    await self.bot.say("Machine learning estimated price of rare provided by www.poeprices.info", embed=embed)
+                    await self.bot.delete_message(ctx.message)
+                    await self.bot.say("Machine learning estimated price of rare provided by https://www.poeprices.info", embed=embed)
                 else:
                     pass
             else:

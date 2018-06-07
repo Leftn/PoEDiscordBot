@@ -25,11 +25,14 @@ class Database():
         DROP TABLE IF EXISTS user;
         DROP TABLE IF EXISTS server;
         
+
         CREATE TABLE server
         (
             server_id text PRIMARY KEY,
             server_name text,
-            server_track_ggg integer
+            server_track_ggg integer,
+            server_channel text,
+            server_most_recent_item_id text
         );
 
         CREATE TABLE user
@@ -42,15 +45,25 @@ class Database():
         cursor.executescript(sql)
         self.commit()
 
-    def add_server(self, server):
-        sql = "INSERT INTO server(server_id, server_name, server_track_ggg) VALUES (?, ?, ?)"
-        self.cursor().execute(sql, (server.id, server.name, 1))
+    def add_server(self, server, channel):
+        sql = "INSERT INTO server(server_id, server_name, server_track_ggg, server_channel) VALUES (?, ?, ?, ?)"
+        self.cursor().execute(sql, (server.id, server.name, 1, channel.id))
         self.commit()
 
-    def set_server_ggg(self, server, value):
-        sql = "UPDATE server SET server_track_ggg = ? WHERE server_id = ?"
-        self.cursor().execute(sql, (value, server.id))
+    def set_server_ggg(self, server, value, channel):
+        sql = "UPDATE server SET server_track_ggg = ?, server_channel = ? WHERE server_id = ?"
+        self.cursor().execute(sql, (value, channel.id, server.id))
         self.commit()
+
+    def check_server_exists(self, server):
+        sql = "SELECT * FROM server WHERE server_id = ?"
+        cursor = self.cursor()
+        cursor.execute(sql, (server.id,))
+        data = cursor.fetchone()
+        if data:
+            return True
+        else:
+            return False
 
     def get_server_ggg(self, server):
         pass

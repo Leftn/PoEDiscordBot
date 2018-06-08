@@ -1,5 +1,6 @@
 import threading, re
 from urllib.parse import urlparse
+from html import unescape
 
 import discord
 import feedparser, hashlib, asyncio
@@ -15,7 +16,8 @@ def clean_html(raw_html):
     """
     cleanr = re.compile('<.*?>')
     cleantext = re.sub(cleanr, '', raw_html)
-    return cleantext
+
+    return unescape(cleantext)
 
 class Timer:
     """
@@ -54,7 +56,7 @@ class GGGTrackerListener(threading.Thread):
         url = item.get('links')[0].get('href')
         embed = discord.Embed(colour=0xff2525, title=item.get('title'), url=url)
         url_parts = urlparse(url)
-        embed.add_field(name=url_parts.scheme+"://"+url_parts.netloc, value="```"+clean_html(item.get("summary"))+"```")
+        embed.add_field(name=url_parts.netloc, value="```"+clean_html(item.get("summary"))+"```")
         embed.set_footer(text=item.get("published"))
         return embed
 

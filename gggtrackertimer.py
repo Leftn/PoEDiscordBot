@@ -1,4 +1,5 @@
 import threading, re
+from urllib.parse import urlparse
 
 import discord
 import feedparser, hashlib, asyncio
@@ -50,10 +51,11 @@ class GGGTrackerListener(threading.Thread):
         self.bot = bot
 
     def create_tracker_embed(self, item):
-        embed = discord.Embed(colour=0xff2525)
-        embed.add_field(name="Summary", value="```"+clean_html(item.get("summary"))+"```")
+        url = item.get('links')[0].get('href')
+        embed = discord.Embed(colour=0xff2525, title=item.get('title'), url=url)
+        url_parts = urlparse(url)
+        embed.add_field(name=url_parts.scheme+"://"+url_parts.netloc, value="```"+clean_html(item.get("summary"))+"```")
         embed.set_footer(text=item.get("published"))
-        embed.set_author(name=item.get("title"), url=item.get("links")[0].get("href"))
         return embed
 
     async def send(self, item):

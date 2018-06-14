@@ -32,7 +32,7 @@ class Database():
             server_name text,
             server_track_ggg integer,
             server_channel text,
-            server_most_recent_item_id text
+            server_track_hash text
         );
 
         CREATE TABLE user
@@ -46,8 +46,8 @@ class Database():
         self.commit()
 
     def add_server(self, server, channel):
-        sql = "INSERT INTO server(server_id, server_name, server_track_ggg, server_channel) VALUES (?, ?, ?, ?)"
-        self.cursor().execute(sql, (server.id, server.name, 1, channel.id))
+        sql = "INSERT INTO server(server_id, server_name, server_track_ggg, server_channel, server_track_hash) VALUES (?, ?, ?, ?, ?)"
+        self.cursor().execute(sql, (server.id, server.name, 1, channel.id, ""))
         self.commit()
 
     def set_server_ggg(self, server, value, channel):
@@ -70,8 +70,30 @@ class Database():
         else:
             return False
 
-    def get_server_ggg(self, server):
-        pass
+    def get_ggg_tracker_server_list(self):
+        sql = "SELECT server_id, server_channel FROM server WHERE server_track_ggg = 1"
+        cursor = self.cursor()
+        cursor.execute(sql)
+        return [x for x in cursor.fetchall()]
+
+    def get_server_ggg_posts(self, server):
+        sql = "SELECT server_track_hash FROM server WHERE server_id = ?"
+        cursor = self.cursor()
+        cursor.execute(sql, (server,))
+        data = cursor.fetchone()
+        if data[0]:
+            return data[0].split("|")
+        else:
+            return []
+
+    def append_server_ggg_post(self, server, hash):
+        sql = "UPDATE server SET server_track_hash = server_track_hash||'|'||? WHERE server_id = ?"
+        if hash not in self.get_server_ggg_posts(server):
+            try:
+                self.cursor().execute(sql, (hash, server))
+            except Exception as e:
+                print(e)
+        self.commit()
 
     def set_league_db(self, user, league):
         sql = "UPDATE user SET user_league = ? WHERE user_id = ?"

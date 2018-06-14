@@ -19,7 +19,7 @@ def update(db):
     );
         """
 
-    cursor.execute(sql)
+    cursor.executescript(sql)
     db.commit()
 
 if __name__ == "__main__":

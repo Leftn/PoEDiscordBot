@@ -8,13 +8,14 @@ from database import Database
 def update(db):
     cursor = db.cursor()
     sql = """
+    DROP TABLE IF EXISTS server;
     CREATE TABLE server
     (
         server_id text PRIMARY KEY,
         server_name text,
         server_track_ggg integer,
         server_channel text,
-        server_most_recent_item_id text
+        server_track_hash text
     );
         """
 

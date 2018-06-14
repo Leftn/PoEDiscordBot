@@ -47,7 +47,7 @@ class GGGTracker():
         if self.check_owner(ctx):
             if self.db.check_server_exists(ctx.message.server):
                 self.db.remove_server(ctx.message.server)
-                await self.bot.say("Your server has successfully been removed from the notification list")
+                await self.bot.say("Your server has successfully been removed from the notification list, you may soon see a flood of embed cards as the server catcches up")
             else:
                 await self.bot.say("The bot isn't registered to post here...")
         else:

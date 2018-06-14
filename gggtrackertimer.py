@@ -51,6 +51,7 @@ class GGGTrackerListener(threading.Thread):
         self.timer = Timer(config.ggg_tracker_interval, self.track_ggg)
         # We still need the instance of the bot to send messages to our listeners
         self.bot = bot
+        self.db = Database()
 
     def create_tracker_embed(self, item):
         url = item.get('links')[0].get('href')
@@ -60,26 +61,21 @@ class GGGTrackerListener(threading.Thread):
         embed.set_footer(text=item.get("published"))
         return embed
 
-    async def send(self, item):
-        db = Database()
-        sql = "SELECT server_id, server_channel FROM server WHERE server_track_ggg = 1 AND server_most_recent_item_id IS NOT ?"
-        cursor = db.cursor()
-        hash = hashlib.md5()
-        hash.update(item.get("links")[0].get("href").encode("utf-8"))
-        digest = hash.hexdigest()
-        cursor.execute(sql, (digest, ))
-        data = cursor.fetchall()
-        embed = self.create_tracker_embed(item)
-        for server in data:
-            sql = "UPDATE server SET server_most_recent_item_id = ?"
-            cursor.execute(sql, (digest,))
-            await self.bot.send_message(discord.Object(id=server[1]), embed=embed)
-        db.commit()
+    async def send(self, items):
+        for item in items:
+            hash = hashlib.md5()
+            hash.update(item.get("links")[0].get("href").encode("utf-8"))
+            digest = hash.hexdigest()
+            embed = self.create_tracker_embed(item)
+            for server in self.db.get_ggg_tracker_server_list():
+                if digest not in self.db.get_server_ggg_posts(server[0]):
+                    self.db.append_server_ggg_post(server[0], digest)
+                    await self.bot.send_message(discord.Object(id=server[1]), embed=embed)
 
 
     async def track_ggg(self):
         feed = feedparser.parse("https://gggtracker.com/rss")
         items = feed["items"]
-        items.sort(key=lambda x: x.published_parsed, reverse=True)  # Sorts items by date, most recent first
-        await self.send(items[0])
+        items.sort(key=lambda x: x.published_parsed, reverse=False)  # Sorts items by date, most recent last
+        await self.send(items)
         self.timer = Timer(config.ggg_tracker_interval, self.track_ggg)

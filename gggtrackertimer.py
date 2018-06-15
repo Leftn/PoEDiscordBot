@@ -72,10 +72,9 @@ class GGGTrackerListener(threading.Thread):
                     self.db.append_server_ggg_post(server[0], digest)
                     await self.bot.send_message(discord.Object(id=server[1]), embed=embed)
 
-
     async def track_ggg(self):
         feed = feedparser.parse("https://gggtracker.com/rss")
         items = feed["items"]
-        items.sort(key=lambda x: x.published_parsed, reverse=False)  # Sorts items by date, most recent last
+        items.sort(key=lambda x: x.published_parsed, reverse=True)  # Sorts items by date, most recent last
         await self.send(items)
         self.timer = Timer(config.ggg_tracker_interval, self.track_ggg)

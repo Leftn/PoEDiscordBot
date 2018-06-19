@@ -56,7 +56,7 @@ class Database():
         self.commit()
 
     def remove_server(self, server):
-        sql = "DELETE FROM server WHERE server_id = ?"
+        sql = "UPDATE server SET server_track_ggg = 1 WHERE server_id = ?"
         self.cursor().execute(sql, (server.id,))
         self.commit()
 
@@ -88,11 +88,7 @@ class Database():
 
     def append_server_ggg_post(self, server, hash):
         sql = "UPDATE server SET server_track_hash = server_track_hash||'|'||? WHERE server_id = ?"
-        if hash not in self.get_server_ggg_posts(server):
-            try:
-                self.cursor().execute(sql, (hash, server))
-            except Exception as e:
-                print(e)
+        self.cursor().execute(sql, (hash, server))
         self.commit()
 
     def set_league_db(self, user, league):

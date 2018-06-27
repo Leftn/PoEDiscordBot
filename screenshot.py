@@ -45,7 +45,7 @@ def get_element_box(driver):
 def get_image(item):
     if config.browser == "chrome":
         options = Options()
-        options.add_argument("--headless") #If you are for some reason not running the bot on a headless server
+        options.set_headless(True)
         driver = webdriver.Chrome(executable_path=config.driver_executable, chrome_options=options)
     elif config.browser == "phantomjs":
         driver = webdriver.PhantomJS()

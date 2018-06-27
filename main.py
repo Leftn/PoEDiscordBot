@@ -47,17 +47,12 @@ async def get(ctx, *args):
 
 
 if __name__ == "__main__":
-    while True:
+    print("Use the following url to connect the bot to your server:")
+    print(oauth_url(config.client_id))
+    for extension in startup_extensions:
         try:
-            print("Use the following url to connect the bot to your server:")
-            print(oauth_url(config.client_id))
-            for extension in startup_extensions:
-                try:
-                    bot.load_extension("cogs."+extension)
-                except Exception as e:
-                    exc = '{}: {}'.format(type(e).__name__, e)
-                    print('Failed to load extension {}\n{}'.format(extension, exc))
-            bot.run(config.token_secret)
+            bot.load_extension("cogs."+extension)
         except Exception as e:
-            log.error(e)
-        time.sleep(60)
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('Failed to load extension {}\n{}'.format(extension, exc))
+    bot.run(config.token_secret)

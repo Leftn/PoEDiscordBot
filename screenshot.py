@@ -38,8 +38,10 @@ def get_element_box(driver):
         e = driver.find_element_by_class_name("item-box")
     except NoSuchElementException:
         return None
-    if not e.size["width"] and not e.size["height"]: # Check if item-box is hidden
+    if not e or (not e.size["width"] and not e.size["height"]): # Check if item-box is hidden
         e = driver.find_element_by_class_name("infocard")
+    else:
+        return None
     return e
 
 def get_image(item):

@@ -8,7 +8,7 @@ from discord.ext import commands
 import config, helpers, screenshot
 
 bot = commands.Bot(command_prefix=".")
-startup_extensions = ["pricechecker", "leaderboards", "gggtracker"]
+startup_extensions = ["pricechecker", "leaderboards"]
 
 log = logging.getLogger("main")
 log.setLevel(config.log_level)
@@ -59,5 +59,5 @@ if __name__ == "__main__":
                     print('Failed to load extension {}\n{}'.format(extension, exc))
             bot.run(config.token_secret)
         except Exception as e:
-            log.error(f"Exception: {e}")
+            log.error(e)
         time.sleep(60)

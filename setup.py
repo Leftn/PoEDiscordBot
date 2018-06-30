@@ -1,7 +1,5 @@
 import pip, os
 
-import cogs.pricechecker
-
 def install(package):
     pip.main(["install", package])
 
@@ -23,8 +21,15 @@ try:
 except ImportError:
     install("feedparser")
 
-os.mkdir("db")
-os.mkdir("logs")
-os.mkdir("images")
-
-cogs.pricechecker.main()
+try:
+    os.mkdir("db")
+except FileExistsError:
+    pass
+try:
+    os.mkdir("logs")
+except FileExistsError:
+    pass
+try:
+    os.mkdir("images")
+except FileExistsError:
+    pass

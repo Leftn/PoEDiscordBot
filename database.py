@@ -3,6 +3,8 @@ import sqlite3
 
 import requests
 
+import config
+
 class Database():
     def __init__(self, dbname=os.path.join("db", "database.db")):
         self.dbname = dbname
@@ -32,7 +34,8 @@ class Database():
             server_name text,
             server_track_ggg integer,
             server_channel text,
-            server_track_hash text
+            server_track_hash text,
+            server_type_flag integer
         );
 
         CREATE TABLE user
@@ -46,8 +49,8 @@ class Database():
         self.commit()
 
     def add_server(self, server, channel):
-        sql = "INSERT INTO server(server_id, server_name, server_track_ggg, server_channel, server_track_hash) VALUES (?, ?, ?, ?, ?)"
-        self.cursor().execute(sql, (server.id, server.name, 1, channel.id, ""))
+        sql = "INSERT INTO server(server_id, server_name, server_track_ggg, server_channel, server_track_hash, server_type_flag) VALUES (?, ?, ?, ?, ?, ?)"
+        self.cursor().execute(sql, (server.id, server.name, 1, channel.id, "", config.ggg_tracker_default_flags))
         self.commit()
 
     def set_server_ggg(self, server, value, channel):
@@ -134,6 +137,17 @@ class Database():
             return [x.get("id") for x in r.get("result")]
         else:
             return []
+
+    def toggle_flag_ggg_tracker(self, channel, flag):
+        cursor = self.cursor()
+        sql = "UPDATE server SET server_type_flag = server_type_flag & ~? WHERE server_channel = ?"
+        cursor.execute(sql, (flag, channel.id))
+
+    def get_flag_ggg_tracker(self, channel):
+        cursor = self.cursor()
+        sql = "SELECT server_type_flag FROM server WHERE server_channel = ?"
+        cursor.execute(sql, (channel.id,))
+        return cursor.fetchone()[0]
 
 if __name__ == "__main__":
     # We want to create the database directory in the top level

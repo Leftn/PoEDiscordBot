@@ -71,6 +71,7 @@ class GGGTrackerListener(threading.Thread):
             for server in self.db.get_ggg_tracker_server_list():
                 if digest not in self.db.get_server_ggg_posts(server[0]):
                     self.db.append_server_ggg_post(server[0], digest)
+
                     await self.bot.send_message(discord.Object(id=server[1]), embed=embed)
 
     async def track_ggg(self):

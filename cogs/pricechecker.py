@@ -155,7 +155,10 @@ def get_poeprices(item, league):
     }
     b64_item = base64.b64encode(item.encode("utf-8"), b"-_")
     url = f"https://poeprices.info/api?l={league}&i={b64_item.decode('utf-8')}"
-    r = requests.get(url, headers=headers, verify=False)
+    try:
+        r = requests.get(url, headers=headers)
+    except Exception as e:
+        r = requests.get(url, headers=headers, verify=False)
     data = r.json()
     if data.get("error") == 0:
         return {"min":data.get("min"), "max":data.get("max"), "currency":data.get("currency"), "type":"rare"}

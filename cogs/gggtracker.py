@@ -1,8 +1,7 @@
-
-
 from discord.ext import commands
 from database import Database
 import gggtrackertimer
+
 
 class GGGTracker():
     """

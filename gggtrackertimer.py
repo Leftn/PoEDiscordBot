@@ -11,6 +11,15 @@ import feedparser, hashlib, asyncio
 from database import Database
 import config
 
+def get_flag_from_url(url):
+    url = urlparse(url)
+    if url.netloc=="www.reddit.com":
+        return 1
+    elif url.netloc=="www.pathofexile.com":
+        return 2
+    else:
+        return 4
+
 def clean_html(raw_html):
     """
     Retrieved from: https://stackoverflow.com/questions/9662346/python-code-to-remove-html-tags-from-a-string
@@ -56,6 +65,9 @@ class GGGTrackerListener(threading.Thread):
         self.bot = bot
         self.db = Database()
 
+    def delete_old_posts(self, channel):
+        self.db.get_server_ggg_posts(channel.id)
+
     def create_tracker_embed(self, item):
         url = item.get('links')[0].get('href')
         embed = discord.Embed(colour=0xff2525, title=item.get('title'), url=url)
@@ -71,10 +83,12 @@ class GGGTrackerListener(threading.Thread):
             digest = hash.hexdigest()
             embed = self.create_tracker_embed(item)
             for channel in self.db.get_ggg_tracker_channel_list():
-                if digest not in self.db.get_server_ggg_posts(channel):
+                channel_flag = self.db.get_flag_ggg_tracker(discord.Object(id=channel))
+                # This check is for both the channel flag + seeing if the post was already made to the server
+                if (channel_flag&get_flag_from_url(item.get("links")[0].get("href"))) and digest not in self.db.get_server_ggg_posts(channel):
                     while True:
                         try:
-                            if self.db.get_flag_ggg_tracker(discord.Object(id=channel)):
+                            if channel_flag: #Just in case
                                 await self.bot.send_message(discord.Object(id=channel), embed=embed)
                                 self.db.append_server_ggg_post(channel, digest)
                             break

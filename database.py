@@ -89,10 +89,10 @@ class Database():
         else:
             return []
 
-    def append_server_ggg_post(self, server, hash):
-        sql = "UPDATE server SET server_track_hash = server_track_hash||'|'||? WHERE server_id = ?"
+    def append_server_ggg_post(self, channel, hash):
+        sql = "UPDATE server SET server_track_hash = server_track_hash||'|'||? WHERE server_channel = ?"
         cursor = self.cursor()
-        cursor.execute(sql, (hash, server))
+        cursor.execute(sql, (hash, channel))
         self.commit()
 
     def set_league_db(self, user, league):

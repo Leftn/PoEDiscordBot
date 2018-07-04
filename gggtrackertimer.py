@@ -66,7 +66,9 @@ class GGGTrackerListener(threading.Thread):
         self.db = Database()
 
     def delete_old_posts(self, channel):
-        self.db.get_server_ggg_posts(channel.id)
+        hashes = self.db.get_server_ggg_posts(channel).split("|")
+        hashes = hashes[-100:] #Keep the last 100 records
+        self.db.set_server_ggg_post(channel, "|".join(hashes))
 
     def create_tracker_embed(self, item):
         url = item.get('links')[0].get('href')
@@ -101,6 +103,8 @@ class GGGTrackerListener(threading.Thread):
                             # If an unknow exception occurs, print it and break
                             traceback.print_exc()
                             break
+                    if len(self.db.get_server_ggg_posts(channel)) > 200:
+                        self.delete_old_posts(channel)
 
 
     async def track_ggg(self):

@@ -95,6 +95,12 @@ class Database():
         cursor.execute(sql, (hash, channel))
         self.commit()
 
+    def set_server_ggg_post(self, channel, new_hash):
+        sql = "UPDATE server SET server_trash_hash = ? WHERE server_channel = ?"
+        cursor = self.cursor()
+        cursor.execute(sql, (new_hash, channel))
+        self.commit()
+
     def set_league_db(self, user, league):
         sql = "UPDATE user SET user_league = ? WHERE user_id = ?"
         cursor = self.cursor()

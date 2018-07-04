@@ -74,7 +74,7 @@ class GGGTrackerListener(threading.Thread):
                 if digest not in self.db.get_server_ggg_posts(channel):
                     while True:
                         try:
-                            if self.db.get_flag_ggg_tracker(channel):
+                            if self.db.get_flag_ggg_tracker(discord.Object(id=channel)):
                                 await self.bot.send_message(discord.Object(id=channel), embed=embed)
                                 self.db.append_server_ggg_post(channel, digest)
                             break

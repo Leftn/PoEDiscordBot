@@ -21,6 +21,8 @@ if config.log_filename is not None and __name__ == "__main__":
     log_fileHandler.setFormatter(log_formatter_file)
     log.addHandler(log_fileHandler)
 
+#TODO: Depreciate check_owner method for the @commands.is_owner decorator
+
 
 @bot.event
 async def on_message(message):

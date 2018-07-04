@@ -73,16 +73,16 @@ class Database():
         else:
             return False
 
-    def get_ggg_tracker_server_list(self):
-        sql = "SELECT server_id, server_channel FROM server WHERE server_track_ggg = 1"
+    def get_ggg_tracker_channel_list(self):
+        sql = "SELECT server_channel FROM server WHERE server_track_ggg = 1"
         cursor = self.cursor()
         cursor.execute(sql)
-        return [x for x in cursor.fetchall()]
+        return [x[0] for x in cursor.fetchall()] # Returns data as a list instead of a tuple of tuples
 
-    def get_server_ggg_posts(self, server):
-        sql = "SELECT server_track_hash FROM server WHERE server_id = ?"
+    def get_server_ggg_posts(self, channel):
+        sql = "SELECT server_track_hash FROM server WHERE server_channel = ?"
         cursor = self.cursor()
-        cursor.execute(sql, (server,))
+        cursor.execute(sql, (channel,))
         data = cursor.fetchone()
         if data[0]:
             return data[0].split("|")
@@ -91,17 +91,20 @@ class Database():
 
     def append_server_ggg_post(self, server, hash):
         sql = "UPDATE server SET server_track_hash = server_track_hash||'|'||? WHERE server_id = ?"
-        self.cursor().execute(sql, (hash, server))
+        cursor = self.cursor()
+        cursor.execute(sql, (hash, server))
         self.commit()
 
     def set_league_db(self, user, league):
         sql = "UPDATE user SET user_league = ? WHERE user_id = ?"
-        self.cursor().execute(sql, (league, user.id))
+        cursor = self.cursor()
+        cursor.execute(sql, (league, user.id))
         self.commit()
 
     def add_user(self, user, league="Standard", name=""):
         sql = "INSERT INTO user(user_id, user_league, user_name) VALUES (?, ?, ?)"
-        self.cursor().execute(sql, (user.id, league, name))
+        cursor = self.cursor()
+        cursor.execute(sql, (user.id, league, name))
         self.commit()
 
     def get_league(self, user):
@@ -142,6 +145,7 @@ class Database():
         cursor = self.cursor()
         sql = "UPDATE server SET server_type_flag = server_type_flag & ~? WHERE server_channel = ?"
         cursor.execute(sql, (flag, channel.id))
+        self.commit()
 
     def get_flag_ggg_tracker(self, channel):
         cursor = self.cursor()

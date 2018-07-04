@@ -2,8 +2,10 @@ import threading, re
 from urllib.parse import urlparse
 from html import unescape
 import traceback
+import time
 
 import discord
+import discord.errors
 import feedparser, hashlib, asyncio
 
 from database import Database
@@ -68,17 +70,30 @@ class GGGTrackerListener(threading.Thread):
             hash.update(item.get("links")[0].get("href").encode("utf-8"))
             digest = hash.hexdigest()
             embed = self.create_tracker_embed(item)
-            for server in self.db.get_ggg_tracker_server_list():
-                if digest not in self.db.get_server_ggg_posts(server[0]):
-                    self.db.append_server_ggg_post(server[0], digest)
+            for channel in self.db.get_ggg_tracker_channel_list():
+                if digest not in self.db.get_server_ggg_posts(channel):
+                    while True:
+                        try:
+                            if self.db.get_flag_ggg_tracker(channel):
+                                await self.bot.send_message(discord.Object(id=channel), embed=embed)
+                                self.db.append_server_ggg_post(channel, digest)
+                            break
+                        except discord.errors.HTTPException as e:
+                            # This error typically occurs when we are getting rate-limited, we just wait for a couple of seconds
+                            if str(e) == "BAD REQUEST (status code: 400)":
+                                time.sleep(2)
+                                continue
+                        except Exception as e:
+                            # If an unknow exception occurs, print it and break
+                            traceback.print_exc()
+                            break
 
-                    await self.bot.send_message(discord.Object(id=server[1]), embed=embed)
 
     async def track_ggg(self):
         try:
             feed = feedparser.parse("https://gggtracker.com/rss")
             items = feed["items"]
-            items.sort(key=lambda x: x.published_parsed, reverse=True)  # Sorts items by date, most recent last
+            items.sort(key=lambda x: x.published_parsed, reverse=False)  # Sorts items by date, most recent last
             await self.send(items)
         except Exception:
             traceback.print_exc()

@@ -3,6 +3,7 @@ import logging.handlers
 
 from discord.utils import oauth_url
 from discord.ext import commands
+from discord.permissions import Permissions
 
 import config, helpers, screenshot
 
@@ -49,7 +50,7 @@ async def get(ctx, *args):
 
 if __name__ == "__main__":
     print("Use the following url to connect the bot to your server:")
-    print(oauth_url(config.client_id))
+    print(oauth_url(config.client_id, Permissions(19456)))
     for extension in startup_extensions:
         try:
             bot.load_extension("cogs."+extension)
